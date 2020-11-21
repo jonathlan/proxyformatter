@@ -15,7 +15,7 @@
             targeturl << "&#{key}=#{value}" if key != 'url'
         }
         
-        body = open(targeturl) {|f|
+        body = URI.open(targeturl) {|f|
         content_type = f.content_type
         f.read
         }
