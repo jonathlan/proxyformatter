@@ -1,7 +1,10 @@
     # myapp.rb
     require 'sinatra'
     require 'open-uri'
-
+    # https://mensfeld.pl/2013/01/ruby-on-rails-webrick-error-nomethoderror-undefined-method-split-for-nilnilclass/
+    
+#class Myapp < Sinatra::Base
+    
     get '/' do
         "Welcome!"
     end
@@ -27,3 +30,9 @@
         type = "#{content_type}; charset = UTF-8"
         halt 200, {'Content-Type' => type, 'Content-length' => body.length}, body
     end
+
+    #get %r{/formatr/(https?://(www.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*))} do
+    get '/formatr/*' do
+        request.url
+    end
+#end
