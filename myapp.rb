@@ -1,26 +1,28 @@
     # myapp.rb
     require 'sinatra'
     require 'open-uri'
-    # https://mensfeld.pl/2013/01/ruby-on-rails-webrick-error-nomethoderror-undefined-method-split-for-nilnilclass/
-    
-#class Myapp < Sinatra::Base
-    
+   
     get '/' do
         "Welcome!"
     end
 
-    get '/format' do    
-        # matches "GET /format?url=foo&token=bar"
+    get '/format/*' do
+        # Target address should be received after the /format/
         ORS = "\r\n"
         content_type = ''
-        targeturl = params['url']
-        params.each { |key, value|         
-            targeturl << "&#{key}=#{value}" if key != 'url'
-        }
+        requrl = request.url
         
+        # Get the base URL
+        base = requrl.slice(/(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\/format\/)/)
+        rsize = requrl.size
+        # Get the actual target URL that's embeded in request.url, that's after /format/
+        targeturl = requrl.slice(base.size,rsize)
+        # Patch to put missing slash in 'http:/' this means that only secure addresses are supported
+        targeturl.gsub!(/https?:\/w/,"https://w")
+        # Now open the retrieve target contents
         body = URI.open(targeturl) {|f|
-        content_type = f.content_type
-        f.read
+            content_type = f.content_type
+            f.read
         }
         # Change date format from DD/MM/YYYY to YYYY-MM-DD
         body.gsub!(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/, "\\3-\\2-\\1")
@@ -31,8 +33,15 @@
         halt 200, {'Content-Type' => type, 'Content-length' => body.length}, body
     end
 
-    #get %r{/formatr/(https?://(www.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*))} do
+
     get '/formatr/*' do
-        request.url
+        requrl = request.url
+        
+        # Get the base URL
+        base = requrl.slice(/(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\/formatr\/)/)
+        rsize = requrl.size
+        # Get the actual target URL that's embeded in request.url, that's after /format/
+        targeturl = requrl.slice(base.size,rsize)
+        # Patch to put missing slash in 'http:/' this means that only secure addresses are supported
+        targeturl.gsub!(/https?:\/w/,"https://w")
     end
-#end
