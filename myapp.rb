@@ -18,7 +18,7 @@
         # Get the actual target URL that's embeded in request.url, that's after /format/
         targeturl = requrl.slice(base.size,rsize)
         # Patch to put missing slash in 'http:/' this means that only secure addresses are supported
-        targeturl.gsub!(/https?:\/w/,"https://w")
+        targeturl.gsub!(/https?:\//,"https://")
         # Now open the retrieve target contents
         body = ''
         URI.open(targeturl) {|f|
@@ -35,7 +35,9 @@
     end
 
 
-    get '/formatr/*' do
+    get '/formatr/*' do        
+        ORS = "\r\n"
+        content_type = ''
         requrl = request.url
         
         # Get the base URL
@@ -44,5 +46,10 @@
         # Get the actual target URL that's embeded in request.url, that's after /format/
         targeturl = requrl.slice(base.size,rsize)
         # Patch to put missing slash in 'http:/' this means that only secure addresses are supported
-        targeturl.gsub!(/https?:\/w/,"https://w")
+        targeturl.gsub!(/https?:\//,"https://")
+        body = ''
+        URI.open(targeturl) {|f|
+            content_type = f.content_type
+            body = f.read
+        }
     end
