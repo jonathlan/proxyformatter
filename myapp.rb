@@ -20,9 +20,10 @@
         # Patch to put missing slash in 'http:/' this means that only secure addresses are supported
         targeturl.gsub!(/https?:\/w/,"https://w")
         # Now open the retrieve target contents
-        body = URI.open(targeturl) {|f|
+        body = ''
+        URI.open(targeturl) {|f|
             content_type = f.content_type
-            f.read
+            body = f.read
         }
         # Change date format from DD/MM/YYYY to YYYY-MM-DD
         body.gsub!(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/, "\\3-\\2-\\1")
