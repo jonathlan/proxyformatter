@@ -1,9 +1,12 @@
     # myapp.rb
     require 'sinatra'
     require 'open-uri'
+    require 'pandoc'
+
+    set :views, settings.root
    
     get '/' do
-        "Welcome!"
+        markdown :README
     end
 
     get '/format/*' do
@@ -11,7 +14,6 @@
         ORS = "\r\n"
         content_type = ''
         requrl = request.url
-        puts "requrl>" << requrl
         
         # Get the base URL
         base = requrl.slice(/(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\/format\/)/)
@@ -27,16 +29,11 @@
             body = f.read
         }
         # Change date format from DD/MM/YYYY to YYYY-MM-DD
-            puts "body gsub " << body.length.to_s
         body.gsub!(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/, "\\3-\\2-\\1")
-            puts "body date " << body.length.to_s
         # Some web servers send N/E in the response, remove it as we don't need it for our tests.
         body.gsub!(/(N\/E)/, "0.0")
-            puts "body N/E " << body.length.to_s
         body << ORS
-            puts "body ORS " << body.length.to_s
         type = "#{content_type}; charset = UTF-8"
-            puts "Type"
         halt 200, {'Content-Type' => type, 'Content-length' => body.length.to_s}, body
     end
 
