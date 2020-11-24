@@ -65,5 +65,9 @@
         # Some web servers send N/E in the response, remove it as we don't need it for our tests.
         body.gsub!(/(N\/E)/, "0.0")
             puts "body N/E " << body.length.to_s
+        body << ORS
+            puts "body ORS " << body.length.to_s
+        type = "#{content_type}; charset = UTF-8"
+            puts "Type"
         body
     end
