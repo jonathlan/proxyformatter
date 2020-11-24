@@ -34,7 +34,7 @@
         body.gsub!(/(N\/E)/, "0.0")
             puts "body N/E " << body.length.to_s
         body << ORS
-            puts "body N/E " << body.length.to_s
+            puts "body ORS " << body.length.to_s
         type = "#{content_type}; charset = UTF-8"
             puts "Type"
         halt 200, {'Content-Type' => type, 'Content-length' => body.length}, body
@@ -62,5 +62,8 @@
             puts "body gsub " << body.length.to_s
         body.gsub!(/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/, "\\3-\\2-\\1")
             puts "body date " << body.length.to_s
+        # Some web servers send N/E in the response, remove it as we don't need it for our tests.
+        body.gsub!(/(N\/E)/, "0.0")
+            puts "body N/E " << body.length.to_s
         body
     end
