@@ -37,7 +37,7 @@
             puts "body ORS " << body.length.to_s
         type = "#{content_type}; charset = UTF-8"
             puts "Type"
-        halt 200, {'Content-Type' => type, 'Content-length' => body.length}, body
+        halt 200, {'Content-Type' => type, 'Content-length' => body.length.to_s}, body
     end
 
 
