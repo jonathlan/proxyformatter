@@ -3,10 +3,10 @@ GEM
   specs:
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    pandoc (0.0.1)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
+    rdiscount (2.2.0.2)
     ruby2_keywords (0.0.2)
     sinatra (2.1.0)
       mustermann (~> 1.0)
@@ -19,7 +19,7 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  pandoc
+  rdiscount
   sinatra (~> 2.1.0)
 
 RUBY VERSION

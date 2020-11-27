@@ -1,7 +1,7 @@
     # myapp.rb
     require 'sinatra'
     require 'open-uri'
-    require 'pandoc'
+    require 'rdiscount'
 
     set :views, settings.root
    
