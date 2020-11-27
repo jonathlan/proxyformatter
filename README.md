@@ -11,9 +11,9 @@ If you want to see the demo of this project you can visit: [https://proxyformatt
 
 It is very simple to use, just type one of below routes in the browser and send the parameters, results will be displayed on screen.
 
-| Route | Parameters | Example |
-| ------ | ------ | ------ |
-| /format/ | None, just insert the destination URL | /format/https://sampleapis.com/countries/ |
+| Route | Parameters | Description | Example |
+| ------ | ------ | ------ | ------ |
+| /format/ | Changes the date format from DD/MM/YYYY to YYYY-MM-DD | None, just insert the destination URL | /format/https://sampleapis.com/countries/ |
 
 ## Development
 
