@@ -13,7 +13,7 @@ It is very simple to use, just type one of below routes in the browser and send 
 
 | Route | Parameters | Description | Example |
 | ------ | ------ | ------ | ------ |
-| /format/ | Changes the date format from DD/MM/YYYY to YYYY-MM-DD | None, just insert the destination URL | /format/https://sampleapis.com/countries/ |
+| /format/ | None, just insert the destination URL | Changes the date format from DD/MM/YYYY to YYYY-MM-DD | /format/https://sampleapis.com/countries/ |
 
 ## Development
 
