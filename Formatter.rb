@@ -3,38 +3,44 @@ class Formatter
     attr_reader :targer_url, :route        
     Body = Struct.new(:body, :content_type, :size, :result) 
 
-    def initialize (requrl)
+    def initialize (requrl = "")
         self.req_url = requrl
-        @route = "formatr"
-        self.targer_url        
         @server = Body.new('','',0, 0)
         @ORS = "\r\n"
     end
     
-    def targer_url
-        # Get the base URL
-        base = @req_url.slice(/(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\/#{route}\/)/)
+    def targer_url(requrl = @req_url)
+        # Get the base route
+        base = requrl.slice(/^\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\//)
         if base == nil
             # Regex failed
-            return @targer_url = nil
+            @targer_url = nil
+            return @targer_url
         end
-        rsize = @req_url.size
-        # Get the actual target URL that's embeded in req_url, that's after the @route
-        @targer_url = @req_url.slice(base.size,rsize)
-        # Patch to put missing slash in 'http:/' this means that only secure addresses are supported
-        @targer_url.gsub!(/https?:\//,"https://")
+        @targer_url = req_url.delete_prefix(base)
     end
 
     def get_body(target)
-        #server = Body.new('','',0)        
-
-        URI.open(target) {|f|
-            @server.content_type = f.content_type
-            @server.body = f.read
-        }
+        begin
+            URI.open(target) {|f|
+                @server.content_type = f.content_type
+                @server.body = f.read
+            }
+        rescue Exception => e
+            @server.body = nil
+            @server.result = e.message
+            return @server
+        end
         @server.body << @ORS
         @server.size = @server.body.length
+        @server.result = "OK"
         @server
     end
-    # The actual formatter
+    
+    def format_body(rules, body)
+        rules.each_pair do |exp, newv|
+            body.gsub!(exp, newv)
+        end
+        body
+    end
 end

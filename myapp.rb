@@ -39,20 +39,23 @@
     end
 
 
-    get '/formatr/*' do        
-        Format = Formatter.new(request.url)
+    get '/formatr/*' do          
+        Format = Formatter.new(request.env['REQUEST_URI'])
+        rules = Hash.new
+        rules [/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/] = "\\3-\\2-\\1"
+        rules [/(N\/E)/] = "0.0"        
 
-        if (Format.targer_url != nil)
-            body = Format.get_body(Format.targer_url)
-        else
-            # URL might be wrong
+        if Format.targer_url == nil
+            return "There's a problem with the URL format"            
         end
+
+        target = Format.get_body(Format.targer_url)
         
-        if (body != nil)
-            # Format body
-            type = "#{body.content_type}; charset = UTF-8"
-            halt 200, {'Content-Type' => type, 'Content-length' => body.size.to_s}, body.body
-        else
-            #Body.result
+        if target.body == nil
+            return "Remote server returned: '#{target.result}'"
         end
+
+        target.body = Format.format_body(rules, target.body)
+        type = "#{target.content_type}; charset = UTF-8"
+        halt 200, {'Content-Type' => type, 'Content-length' => target.size.to_s}, target.body
     end
