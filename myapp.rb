@@ -39,7 +39,8 @@
     end
 
 
-    get '/formatr/*' do          
+    get '/formatr/*' do
+        puts "Heroku Path: #{request.env['REQUEST_URI']}"
         Format = Formatter.new(request.env['REQUEST_URI'])
         rules = Hash.new
         rules [/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/] = "\\3-\\2-\\1"
