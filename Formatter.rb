@@ -1,15 +1,16 @@
 class Formatter
     attr_accessor :req_url
-    attr_reader :targer_url, :route        
+    attr_reader :targer_url      
     Body = Struct.new(:body, :content_type, :size, :result) 
 
     def initialize (requrl = "")
-        self.req_url = requrl
+        self.req_url = requrl        
         @server = Body.new('','',0, 0)
         @ORS = "\r\n"
     end
     
     def targer_url(requrl = @req_url)
+        puts "@requrl: #{@req_url}"
         # Get the base route
         base = requrl.slice(/^\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\//)
         if base == nil
