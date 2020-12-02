@@ -1,5 +1,3 @@
-require 'logger'
-
 class Formatter    
     attr_accessor :req_url
     attr_reader :targer_url      
@@ -9,11 +7,9 @@ class Formatter
         self.req_url = requrl        
         @server = Body.new('','',0, 0)
         @ORS = "\r\n"
-        @logger = Logger.new(STDOUT)
     end
     
     def targer_url(requrl = @req_url)
-        @logger.info "LoggerR req_url: #{req_url}"
         # Get the base route
         base = requrl.slice(/^\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\//)
         if base == nil

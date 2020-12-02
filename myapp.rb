@@ -40,9 +40,11 @@
 
 
     get '/formatr/*' do
-        logger.info "Logger Heroku Path: #{request.env['REQUEST_URI']}"
-        logger.info "Logger Heroku Path: #{request.env['REQUEST_PATH']}"
-        Format = Formatter.new(request.env['REQUEST_PATH'])
+        logger.info "REQUEST_PATH: #{request.env['REQUEST_PATH']}"                
+        path = add_parameters(request.env['REQUEST_PATH'], params)
+        logger.info "Path: #{path}"
+
+        Format = Formatter.new(path)
         rules = Hash.new
         rules [/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/] = "\\3-\\2-\\1"
         rules [/(N\/E)/] = "0.0"        
@@ -50,7 +52,7 @@
         if Format.targer_url == nil
             return "There's a problem with the URL format"            
         end
-                   
+
         target = Format.get_body(Format.targer_url)
         
         if target.body == nil
@@ -60,4 +62,17 @@
         target.body = Format.format_body(rules, target.body)
         type = "#{target.content_type}; charset = UTF-8"
         halt 200, {'Content-Type' => type, 'Content-length' => target.size.to_s}, target.body
+    end
+
+    def add_parameters(path, params)        
+        len = params.length-1 # -1 because sinatra seems to add an extra parameter "splat"
+        logger.info "Params length-1: #{len}"
+        if len > 0
+            path << "?"
+            params.take(len).each_with_index { |(key, value) , index|
+                path << "#{key}=#{value}"
+                path << "&" if index + 1 < len
+            }
+        end
+        path
     end
