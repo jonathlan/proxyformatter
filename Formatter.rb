@@ -10,7 +10,10 @@ class Formatter
     end
     
     def targer_url(requrl = @req_url)
-        puts "@requrl: #{@req_url}"
+        puts "@requrl: #{@req_url}"        
+        # debug
+        return req_url
+        # Debug
         # Get the base route
         base = requrl.slice(/^\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\//)
         if base == nil
