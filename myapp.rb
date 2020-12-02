@@ -5,11 +5,7 @@
     require_relative 'Formatter'
 
     set :views, settings.root
-
-    configure do
-        enable :logging
-    end
-   
+  
     get '/' do
         markdown :README
     end
@@ -44,9 +40,9 @@
 
 
     get '/formatr/*' do
-        puts "Heroku Path: #{request.env['REQUEST_URI']}"
         logger.info "Logger Heroku Path: #{request.env['REQUEST_URI']}"
-        Format = Formatter.new(request.env['REQUEST_URI'])
+        logger.info "Logger Heroku Path: #{request.env['REQUEST_PATH']}"
+        Format = Formatter.new(request.env['REQUEST_PATH'])
         rules = Hash.new
         rules [/([0-9][0-9])\/([0-9][0-9])\/([0-9][0-9][0-9][0-9])/] = "\\3-\\2-\\1"
         rules [/(N\/E)/] = "0.0"        
@@ -54,11 +50,7 @@
         if Format.targer_url == nil
             return "There's a problem with the URL format"            
         end
-        #debug"
-        if true
-            return "URL?: #{Format.targer_url}"
-        end
-        #Debug            
+                   
         target = Format.get_body(Format.targer_url)
         
         if target.body == nil
