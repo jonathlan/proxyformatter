@@ -1,3 +1,5 @@
+require 'open-uri'
+
 class Formatter    
     attr_accessor :req_url
     attr_reader :targer_url      
